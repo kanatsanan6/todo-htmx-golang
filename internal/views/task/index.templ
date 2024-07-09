@@ -1,10 +1,15 @@
 package task
 
-import "github.com/kanatsanan6/todo-htmx-go/types"
+import (
+	"github.com/kanatsanan6/todo-htmx-go/internal/views/layouts"
+	"github.com/kanatsanan6/todo-htmx-go/types"
+)
 
 templ Index(tasks []*types.Task) {
-	for _, task := range tasks {
-		<p>{ task.Title }</p>
-		<p>{ task.Description }</p>
+	@layouts.Base() {
+		for _, task := range tasks {
+			<p class="underline text-lime-500">{ task.Title }</p>
+			<p>{ task.Description }</p>
+		}
 	}
 }

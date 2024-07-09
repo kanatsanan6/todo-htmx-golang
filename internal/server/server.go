@@ -26,6 +26,9 @@ func (s *Server) Start(port int, database *db.Database) error {
 
 	r.Use(middleware.Logger)
 
+	fs := http.FileServer(http.Dir("static"))
+	r.Handle("/static/*", http.StripPrefix("/static/", fs))
+
 	h := NewHealthHandler()
 	r.Get("/health", h.Index())
 
