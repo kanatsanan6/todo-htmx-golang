@@ -1,0 +1,10 @@
+package task
+
+import "github.com/kanatsanan6/todo-htmx-go/types"
+
+templ Index(tasks []*types.Task) {
+	for _, task := range tasks {
+		<p>{ task.Title }</p>
+		<p>{ task.Description }</p>
+	}
+}

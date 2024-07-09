@@ -1,0 +1,8 @@
+app:
+  port: 4000
+database:
+  host: localhost
+  port: 5433
+  user: postgres
+  pass: postgres
+  name: todo_htmx_go
