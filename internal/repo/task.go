@@ -25,7 +25,6 @@ func (t *taskRepo) GetAll() ([]*types.Task, error) {
 		if err := row.Scan(
 			&task.ID,
 			&task.Title,
-			&task.Description,
 			&task.Completed,
 			&task.CreatedAt,
 			&task.UpdatedAt,
@@ -40,13 +39,11 @@ func (t *taskRepo) GetAll() ([]*types.Task, error) {
 
 func (t *taskRepo) Create(task *types.Task) error {
 	return t.db.QueryRow(
-		`INSERT INTO tasks (title, description) VALUES ($1, $2) RETURNING *`,
+		`INSERT INTO tasks (title) VALUES ($1) RETURNING *`,
 		task.Title,
-		task.Description,
 	).Scan(
 		&task.ID,
 		&task.Title,
-		&task.Description,
 		&task.Completed,
 		&task.CreatedAt,
 		&task.UpdatedAt,

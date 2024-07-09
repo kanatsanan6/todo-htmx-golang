@@ -1,7 +1,6 @@
 package server
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/a-h/templ"
@@ -29,8 +28,7 @@ func (t *TaskHandler) Index() func(w http.ResponseWriter, r *http.Request) {
 func (t *TaskHandler) Create() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		t.tr.Create(&types.Task{
-			Title:       r.FormValue("title"),
-			Description: sql.NullString{String: r.FormValue("description")},
+			Title: r.FormValue("title"),
 		})
 
 		tasks, _ := t.tr.GetAll()
