@@ -1,8 +1,10 @@
 package task
 
 import (
+	"fmt"
 	"github.com/kanatsanan6/todo-htmx-go/internal/views/layouts"
 	"github.com/kanatsanan6/todo-htmx-go/types"
+	"strconv"
 )
 
 templ Index(tasks []*types.Task) {
@@ -22,11 +24,23 @@ templ TasksList(tasks []*types.Task) {
 }
 
 templ TaskCard(task *types.Task) {
-	<li class="flex justify-between py-3">
+	<li id={ "task" + strconv.FormatInt(task.ID, 10) } class="flex justify-between py-3">
 		<div class="flex min-w-0 gap-4">
-			<p class="text-sm font-semibold leading-6 text-gray-900">{ task.Title }</p>
+			<div class="flex items-start space-x-2">
+				<input
+					type="checkbox"
+					class="h-fit mt-[5px]"
+					hx-put={ fmt.Sprintf("/tasks/%d/toggle", task.ID) }
+					hx-target={ fmt.Sprintf("#task%d", task.ID) }
+					hx-swap="outerHTML"
+					if task.Completed.Bool {
+						checked
+					}
+				/>
+				<p class="text-sm font-semibold w-fit leading-6 text-gray-900">{ task.Title }</p>
+			</div>
 		</div>
-		<div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+		<div class="shrink-0 flex flex-col items-end">
 			@statusBadge(task)
 			<p class="mt-1 text-xs leading-5 text-gray-500">{ task.CreatedAt.Local().Format("02 Jan 06 15:04") }</p>
 		</div>
@@ -38,7 +52,7 @@ templ TaskForm() {
 		class="grid grid-cols-6 gap-2 mb-2"
 		hx-post="/tasks"
 		hx-target="#tasks"
-		hx-swap="beforeend"
+		hx-swap="afterbegin"
 		hx-on::after-request="this.reset()"
 	>
 		<input
@@ -46,7 +60,7 @@ templ TaskForm() {
 			name="title"
 			type="text"
 			required
-			class="col-span-5 block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+			class="col-span-5 block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm leading-6"
 		/>
 		<button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">+</button>
 	</form>

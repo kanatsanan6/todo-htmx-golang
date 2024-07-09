@@ -1,7 +1,9 @@
 package server
 
 import (
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/a-h/templ"
 	"github.com/kanatsanan6/todo-htmx-go/internal/repo"
@@ -32,6 +34,21 @@ func (t *TaskHandler) Create() func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		t.tr.Create(tk)
+
+		templ.Handler(task.TaskCard(tk)).ServeHTTP(w, r)
+	}
+}
+
+func (t *TaskHandler) Toggle() func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
+
+		tk, _ := t.tr.GetByID(id)
+		tk.Completed.Bool = !tk.Completed.Bool
+		log.Println(tk.Completed.Bool)
+
+		err := t.tr.Update(tk)
+		log.Println(err)
 
 		templ.Handler(task.TaskCard(tk)).ServeHTTP(w, r)
 	}
