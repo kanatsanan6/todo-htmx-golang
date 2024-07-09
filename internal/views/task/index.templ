@@ -16,17 +16,21 @@ templ Index(tasks []*types.Task) {
 templ TasksList(tasks []*types.Task) {
 	<ul id="tasks" role="list" class="divide-y divide-gray-100">
 		for _, task := range tasks {
-			<li class="flex justify-between py-3">
-				<div class="flex min-w-0 gap-4">
-					<p class="text-sm font-semibold leading-6 text-gray-900">{ task.Title }</p>
-				</div>
-				<div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-					@statusBadge(task)
-					<p class="mt-1 text-xs leading-5 text-gray-500">{ task.CreatedAt.Local().Format("02 Jan 06 15:04") }</p>
-				</div>
-			</li>
+			@TaskCard(task)
 		}
 	</ul>
+}
+
+templ TaskCard(task *types.Task) {
+	<li class="flex justify-between py-3">
+		<div class="flex min-w-0 gap-4">
+			<p class="text-sm font-semibold leading-6 text-gray-900">{ task.Title }</p>
+		</div>
+		<div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+			@statusBadge(task)
+			<p class="mt-1 text-xs leading-5 text-gray-500">{ task.CreatedAt.Local().Format("02 Jan 06 15:04") }</p>
+		</div>
+	</li>
 }
 
 templ TaskForm() {
@@ -34,6 +38,7 @@ templ TaskForm() {
 		class="grid grid-cols-6 gap-2 mb-2"
 		hx-post="/tasks"
 		hx-target="#tasks"
+		hx-swap="beforeend"
 		hx-on::after-request="this.reset()"
 	>
 		<input

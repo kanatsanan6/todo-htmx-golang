@@ -27,12 +27,12 @@ func (t *TaskHandler) Index() func(w http.ResponseWriter, r *http.Request) {
 
 func (t *TaskHandler) Create() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		t.tr.Create(&types.Task{
+		tk := &types.Task{
 			Title: r.FormValue("title"),
-		})
+		}
 
-		tasks, _ := t.tr.GetAll()
+		t.tr.Create(tk)
 
-		templ.Handler(task.TasksList(tasks)).ServeHTTP(w, r)
+		templ.Handler(task.TaskCard(tk)).ServeHTTP(w, r)
 	}
 }
