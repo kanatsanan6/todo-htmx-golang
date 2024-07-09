@@ -36,7 +36,7 @@ func (s *Server) Start(port int, database *db.Database) error {
 	t := NewTaskHandler(tr)
 
 	r.Get("/tasks", t.Index())
-	r.Post("/task", t.Create())
+	r.Post("/tasks", t.Create())
 
 	log.Printf("Listening to port %d", port)
 	return http.ListenAndServe(fmt.Sprintf(":%d", port), r)
