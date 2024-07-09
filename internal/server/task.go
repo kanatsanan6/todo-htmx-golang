@@ -1,7 +1,6 @@
 package server
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -45,10 +44,8 @@ func (t *TaskHandler) Toggle() func(w http.ResponseWriter, r *http.Request) {
 
 		tk, _ := t.tr.GetByID(id)
 		tk.Completed.Bool = !tk.Completed.Bool
-		log.Println(tk.Completed.Bool)
 
-		err := t.tr.Update(tk)
-		log.Println(err)
+		t.tr.Update(tk)
 
 		templ.Handler(task.TaskCard(tk)).ServeHTTP(w, r)
 	}
