@@ -19,6 +19,11 @@ func main() {
 		log.Fatalf("connect db: %s", err.Error())
 	}
 
+	err = database.MigrateUp()
+	if err != nil {
+		log.Fatalf("migrate db: %s", err.Error())
+	}
+
 	s := server.NewServer()
 	if err = s.Start(env.App.Port, database); err != nil {
 		log.Fatalf("initialize server: %s", err.Error())

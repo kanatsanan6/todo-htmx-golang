@@ -2,7 +2,13 @@ package db
 
 import (
 	"fmt"
+	"log"
+	"path/filepath"
+	"runtime"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
 	"github.com/kanatsanan6/todo-htmx-go/config"
 	_ "github.com/lib/pq"
@@ -29,4 +35,30 @@ func NewDatabase(env *config.Env) (*Database, error) {
 
 func (database *Database) GetDB() *sqlx.DB {
 	return database.db
+}
+
+func (database *Database) MigrateUp() error {
+	driver, err := postgres.WithInstance(database.db.DB, &postgres.Config{})
+	if err != nil {
+		return err
+	}
+
+	_, b, _, _ := runtime.Caller(0)
+	migrationDir := "file://" + filepath.Dir(b) + "/migrations"
+
+	m, err := migrate.NewWithDatabaseInstance(migrationDir, POSTGRES, driver)
+	if err != nil {
+		return err
+	}
+
+	if err = m.Up(); err != nil {
+		if err == migrate.ErrNoChange {
+			log.Println("No migration changed")
+			return nil
+		} else {
+			return err
+		}
+	}
+	log.Println("Migration has been executed")
+	return nil
 }
