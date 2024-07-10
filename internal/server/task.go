@@ -50,3 +50,11 @@ func (t *TaskHandler) Toggle() func(w http.ResponseWriter, r *http.Request) {
 		templ.Handler(task.TaskCard(tk)).ServeHTTP(w, r)
 	}
 }
+
+func (t *TaskHandler) Destroy() func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
+
+		t.tr.Destroy(id)
+	}
+}

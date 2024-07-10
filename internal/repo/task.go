@@ -83,3 +83,8 @@ func (t *taskRepo) Update(task *types.Task) error {
 		&task.UpdatedAt,
 	)
 }
+
+func (t *taskRepo) Destroy(id int64) error {
+	row := t.db.QueryRow(`DELETE FROM tasks WHERE (id) = ($1)`, id)
+	return row.Err()
+}

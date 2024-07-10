@@ -7,6 +7,7 @@ A simple and interactive Todo List application built with Golang and HTMX.
 - Display all tasks
 - Add new tasks
 - Update existing tasks' status
+- Delete tasks
 
 ## Demo
 

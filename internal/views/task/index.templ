@@ -26,18 +26,26 @@ templ TasksList(tasks []*types.Task) {
 templ TaskCard(task *types.Task) {
 	<li id={ "task" + strconv.FormatInt(task.ID, 10) } class="flex justify-between py-3">
 		<div class="flex min-w-0 gap-4">
-			<div class="flex items-start space-x-2">
-				<input
-					type="checkbox"
-					class="h-fit mt-[5px]"
-					hx-put={ fmt.Sprintf("/tasks/%d/toggle", task.ID) }
+			<div class="flex flex-col shrink-0 gap-2">
+				<div class="flex items-start space-x-2">
+					<input
+						type="checkbox"
+						class="h-fit mt-[5px]"
+						hx-put={ fmt.Sprintf("/tasks/%d/toggle", task.ID) }
+						hx-target={ fmt.Sprintf("#task%d", task.ID) }
+						hx-swap="outerHTML"
+						if task.Completed.Bool {
+							checked
+						}
+					/>
+					<p class="text-sm font-semibold w-fit leading-6 text-gray-900">{ task.Title }</p>
+				</div>
+				<p
+					class="text-xs text-red-500 cursor-pointer"
+					hx-delete={ fmt.Sprintf("/tasks/%d", task.ID) }
 					hx-target={ fmt.Sprintf("#task%d", task.ID) }
 					hx-swap="outerHTML"
-					if task.Completed.Bool {
-						checked
-					}
-				/>
-				<p class="text-sm font-semibold w-fit leading-6 text-gray-900">{ task.Title }</p>
+				>Delete</p>
 			</div>
 		</div>
 		<div class="shrink-0 flex flex-col items-end">
