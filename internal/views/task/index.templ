@@ -38,7 +38,34 @@ templ TaskCard(task *types.Task) {
 							checked
 						}
 					/>
-					<p class="text-sm font-semibold w-fit leading-6 text-gray-900">{ task.Title }</p>
+					<style>
+						[x-cloak] { display: none }
+					</style>
+					<div x-cloak x-data="{ open: false }">
+						<div x-show="!open" class="flex items-center space-x-2">
+							<p
+								@click="open = true"
+								class="text-sm font-semibold w-fit leading-6 text-gray-900 cursor-pointer"
+							>{ task.Title }</p>
+						</div>
+						<form
+							hx-put={ fmt.Sprintf("/tasks/%d", task.ID) }
+							hx-target={ fmt.Sprintf("#task%d", task.ID) }
+							hx-swap="outerHTML"
+							x-show="open"
+							class="flex items-center space-x-2"
+						>
+							<input
+								id="title"
+								name="title"
+								type="text"
+								x-trap="open"
+								required
+								value={ task.Title }
+								class="block w-full rounded-md !outline-none focus:ring-transparent text-gray-900 placeholder:text-gray-400 text-sm leading-6"
+							/>
+						</form>
+					</div>
 				</div>
 				<p
 					class="text-xs text-red-500 cursor-pointer"
