@@ -6,9 +6,10 @@ A simple and interactive Todo List application built with Golang and HTMX.
 
 - Display all tasks
 - Add new tasks
-- Update existing tasks' status
+- Update tasks' title
+- Toggle tasks' status
 - Delete tasks
 
 ## Demo
 
-![Screen Recording 2567-07-10 at 02 15 38](https://github.com/kanatsanan6/todo-htmx-golang/assets/76254274/8cb5bada-8601-4988-a566-faead9ae0bf4)
+![Screen Recording 2567-07-13 at 00 46 16](https://github.com/user-attachments/assets/a6a40146-d46c-4447-bcae-00dcfa774ac2)
