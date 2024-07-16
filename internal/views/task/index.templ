@@ -2,9 +2,9 @@ package task
 
 import (
 	"fmt"
+	"github.com/kanatsanan6/todo-htmx-go/internal/views/helper"
 	"github.com/kanatsanan6/todo-htmx-go/internal/views/layouts"
 	"github.com/kanatsanan6/todo-htmx-go/types"
-	"strconv"
 )
 
 templ Index(tasks []*types.Task) {
@@ -24,23 +24,20 @@ templ TasksList(tasks []*types.Task) {
 }
 
 templ TaskCard(task *types.Task) {
-	<li id={ "task" + strconv.FormatInt(task.ID, 10) } class="flex justify-between py-3">
+	<li id={ "task" + helper.Int64ToString(task.ID) } class="flex justify-between py-3">
 		<div class="flex min-w-0 gap-4">
 			<div class="flex flex-col shrink-0 gap-2">
 				<div class="flex items-start space-x-2">
 					<input
 						type="checkbox"
 						class="h-fit mt-[5px]"
-						hx-put={ fmt.Sprintf("/tasks/%d/toggle", task.ID) }
-						hx-target={ fmt.Sprintf("#task%d", task.ID) }
 						hx-swap="outerHTML"
+						hx-put={ fmt.Sprintf("/tasks/%d/toggle", task.ID) }
+						hx-target={ "#task" + helper.Int64ToString(task.ID) }
 						if task.Completed.Bool {
 							checked
 						}
 					/>
-					<style>
-						[x-cloak] { display: none }
-					</style>
 					<div x-cloak x-data="{ open: false }">
 						<div x-show="!open" class="flex items-center space-x-2">
 							<p
